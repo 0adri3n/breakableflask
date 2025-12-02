@@ -14,14 +14,6 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v4
     
-        # *** ÉTAPE DE DIAGNOSTIC AJOUTÉE ***
-        - name: Vérification de la présence du requirements.txt
-          run: |
-            ls -l requirements.txt
-            cat requirements.txt
-            echo "Le répertoire courant est : $(pwd)"
-        # ***********************************
-    
         - name: Scan du fichier requirements.txt
           uses: aquasecurity/trivy-action@master
           with:
@@ -44,13 +36,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Scan du Dockerfile
-        # Pour les configurations comme un Dockerfile, on utilise le type 'config'.
-        # On pointe le répertoire ('.') et on laisse Trivy chercher le Dockerfile par défaut.
-        # Alternativement, on peut utiliser 'input: Dockerfile'.
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'config'
-          input: '.'                 # **CORRIGÉ : Pointer le répertoire racine pour le scan de config (ou utiliser 'input: Dockerfile')**
+          input: '.'
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
