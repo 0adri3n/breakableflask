@@ -9,16 +9,19 @@ jobs:
   Dependances:
     name: Analyse des dépendances Python
     runs-on: ubuntu-24.04
-  
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
   
       - name: Scan du fichier requirements.txt
+        # Pour les dépendances (requirements.txt, package-lock.json, etc.), le scan doit être de type 'fs' 
+        # (système de fichiers) ou implicitement 'repo' ou 'rootdir'.
+        # On peut pointer directement le fichier avec la propriété 'input'.
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          scan-type: 'fs'           # Scan du système de fichiers
-          scan-ref: './requirements.txt'
+          scan-type: 'fs'           # Maintenu à 'fs' (système de fichiers)
+          input: 'requirements.txt' # **CORRIGÉ : Utiliser 'input' pour pointer le fichier**
           format: 'table'
           exit-code: '1'
           vuln-type: 'library'
@@ -36,10 +39,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Scan du Dockerfile
+        # Pour les configurations comme un Dockerfile, on utilise le type 'config'.
+        # On pointe le répertoire ('.') et on laisse Trivy chercher le Dockerfile par défaut.
+        # Alternativement, on peut utiliser 'input: Dockerfile'.
         uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: 'config'
-          scan-ref: './Dockerfile'
+          input: '.'                 # **CORRIGÉ : Pointer le répertoire racine pour le scan de config (ou utiliser 'input: Dockerfile')**
           format: 'table'
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
