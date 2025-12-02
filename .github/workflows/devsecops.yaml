@@ -9,22 +9,22 @@ jobs:
   Dependances:
     name: Analyse des dépendances Python
     runs-on: ubuntu-24.04
-
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Scan des dépendances (requirements.txt)
+  
+      - name: Scan du fichier requirements.txt
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          scan-type: 'fs'           # Analyse du système de fichiers
-          scan-ref: '.'             # Répertoire courant
+          scan-type: 'fs'           # Scan du système de fichiers
+          scan-ref: './requirements.txt'
           format: 'table'
-          exit-code: '1'            # Échec si vulnérabilités
+          exit-code: '1'
           vuln-type: 'library'
           severity: 'CRITICAL,HIGH'
           ignore-unfixed: true
-          file-patterns: 'pip:.*\.txt'
+
 
   Dockerfile:
     name: Analyse du Dockerfile
