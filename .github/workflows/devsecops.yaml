@@ -17,7 +17,7 @@ jobs:
       - name: Scan du fichier requirements.txt
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          scan-type: 'config'           # Scan du système de fichiers
+          scan-type: 'fs'           # Scan du système de fichiers
           scan-ref: './requirements.txt'
           format: 'table'
           exit-code: '1'
