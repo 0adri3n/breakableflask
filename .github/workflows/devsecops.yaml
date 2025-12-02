@@ -23,7 +23,7 @@ jobs:
         # ***********************************
     
         - name: Scan du fichier requirements.txt
-          uses: aquasecurity/trivy-action@v0.18.0 # Ou la version que vous avez choisie
+          uses: aquasecurity/trivy-action@master
           with:
             scan-type: 'fs'
             # Nous utilisons toujours 'input', mais la vérification ci-dessus confirmera le chemin.
