@@ -17,8 +17,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
 
       - name: Scan des dépendances (requirements.txt)
-        run: |
-          trivy fs --exit-code 1 --severity HIGH,CRITICAL --file-patterns 'pip:.*\.txt' .
+        run: trivy fs --exit-code 1 --severity HIGH,CRITICAL --file-patterns 'pip:.*\.txt' .
           
   Dockerfile:
     name: Analyse du Dockerfile
@@ -43,5 +42,4 @@ jobs:
 
 
       - name: Scan du Dockerfile
-        run: |
-          trivy config --exit-code 1 --severity HIGH,CRITICAL Dockerfile
+        run: trivy config --exit-code 1 --severity HIGH,CRITICAL Dockerfile
