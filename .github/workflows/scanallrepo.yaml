@@ -1,4 +1,4 @@
-name: build
+name: Scann all repository
 on:
   push:
     branches:
