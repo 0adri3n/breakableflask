@@ -26,7 +26,7 @@ jobs:
           uses: aquasecurity/trivy-action@master
           with:
             scan-type: 'fs'
-            input: '/home/runner/work/breakableflask/breakableflask/requirements.txt' 
+            input: 'requirements.txt' 
             format: 'table'
             exit-code: '1'
             vuln-type: 'library'
