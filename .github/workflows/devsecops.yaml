@@ -7,26 +7,33 @@ on:
 jobs:
 
   Dependances:
-    name: Analyse des dépendances Python
-    runs-on: ubuntu-24.04
+      name: Analyse des dépendances Python
+      runs-on: ubuntu-24.04
+      
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
     
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-  
-      - name: Scan du fichier requirements.txt
-        # Pour les dépendances (requirements.txt, package-lock.json, etc.), le scan doit être de type 'fs' 
-        # (système de fichiers) ou implicitement 'repo' ou 'rootdir'.
-        # On peut pointer directement le fichier avec la propriété 'input'.
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'           # Maintenu à 'fs' (système de fichiers)
-          input: './requirements.txt' # **CORRIGÉ : Utiliser 'input' pour pointer le fichier**
-          format: 'table'
-          exit-code: '1'
-          vuln-type: 'library'
-          severity: 'CRITICAL,HIGH'
-          ignore-unfixed: true
+        # *** ÉTAPE DE DIAGNOSTIC AJOUTÉE ***
+        - name: Vérification de la présence du requirements.txt
+          run: |
+            ls -l requirements.txt
+            cat requirements.txt
+            echo "Le répertoire courant est : $(pwd)"
+        # ***********************************
+    
+        - name: Scan du fichier requirements.txt
+          uses: aquasecurity/trivy-action@v0.18.0 # Ou la version que vous avez choisie
+          with:
+            scan-type: 'fs'
+            # Nous utilisons toujours 'input', mais la vérification ci-dessus confirmera le chemin.
+            # Si le fichier est dans un sous-répertoire (ex: 'app/requirements.txt'), changez 'input' ici.
+            input: 'requirements.txt' 
+            format: 'table'
+            exit-code: '1'
+            vuln-type: 'library'
+            severity: 'CRITICAL,HIGH'
+            ignore-unfixed: true
 
 
   Dockerfile:
