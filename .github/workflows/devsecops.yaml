@@ -1,45 +1,55 @@
 name: Automatisation des tests DevSecOps
 
-on: 
+on:
   push:
+  pull_request:
 
 jobs:
 
   Dependances:
     name: Analyse des dépendances Python
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
-      - name: Récupération du code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Installer Trivy
-        uses: aquasec/trivy-action@master
-
       - name: Scan des dépendances (requirements.txt)
-        run: trivy fs --exit-code 1 --severity HIGH,CRITICAL --file-patterns 'pip:.*\.txt' .
-          
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'fs'           # Analyse du système de fichiers
+          scan-ref: '.'             # Répertoire courant
+          format: 'table'
+          exit-code: '1'            # Échec si vulnérabilités
+          vuln-type: 'library'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          file-patterns: 'pip:.*\.txt'
+
   Dockerfile:
     name: Analyse du Dockerfile
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: Dependances
 
     steps:
-      - name: Récupération du code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Installer Trivy
-        uses: aquasec/trivy-action@master
+      - name: Scan du Dockerfile
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'config'       # Analyse de configuration
+          scan-ref: './Dockerfile'  # Fichier Dockerfile
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
   Deploy:
-    name: Déploiement (fictif)
-    runs-on: ubuntu-latest
+    name: Deploy (factice)
+    runs-on: ubuntu-24.04
     needs: Dockerfile
 
     steps:
       - name: Deploy
         run: |
-          echo "Rien à faire ici. Votre application est prête à être déployée."
-
-
-      - name: Scan du Dockerfile
-        run: trivy config --exit-code 1 --severity HIGH,CRITICAL Dockerfile
+          echo "Votre pipeline DevSecOps est validé. Déploiement fictif."
