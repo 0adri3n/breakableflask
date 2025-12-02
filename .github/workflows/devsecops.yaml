@@ -26,9 +26,7 @@ jobs:
           uses: aquasecurity/trivy-action@master
           with:
             scan-type: 'fs'
-            # Nous utilisons toujours 'input', mais la vérification ci-dessus confirmera le chemin.
-            # Si le fichier est dans un sous-répertoire (ex: 'app/requirements.txt'), changez 'input' ici.
-            input: 'requirements.txt' 
+            input: '/home/runner/work/breakableflask/breakableflask/requirements.txt' 
             format: 'table'
             exit-code: '1'
             vuln-type: 'library'
